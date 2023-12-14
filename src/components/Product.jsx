@@ -28,7 +28,6 @@ function Product() {
             <>
                 <div className={"col-md-6"}>
                     <Skeleton height={400}/>
-
                 </div>
                 <div className={"col-md-6"} style={{lineHeight:2}}>
                     <Skeleton height={50} width={300}/>
