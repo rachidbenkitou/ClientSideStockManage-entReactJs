@@ -11,3 +11,10 @@ export const delItem = (product) => {
         payload : product
     }
 }
+
+// actions.js
+export const clearCart = () => {
+    return {
+        type: 'CLEAR_CART',
+    };
+};

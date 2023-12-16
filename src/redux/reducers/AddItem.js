@@ -13,7 +13,9 @@ const addItems = (state = addItem, action) => {
                 return x.id !== action.payload.id
             })
             break;
-
+        case 'CLEAR_CART':
+            return [];
+            break;
         default: return state;
             break;
 
