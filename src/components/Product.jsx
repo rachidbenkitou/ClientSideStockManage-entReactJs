@@ -17,8 +17,9 @@ function Product() {
     useEffect(()=>{
         const  getProduct = async ()=>{
             setLoading(true);
-            const response=  await fetch(`https://fakestoreapi.com/products/${id}`);
-            setProduct(await response.json());
+            const response=  await fetch(`http://127.0.0.1:8000/api/produits/id/${id}`);
+            const reponseData=await response.clone().json()
+            setProduct(reponseData.produits.data[0]);
             setLoading(false);
         }
         getProduct();
@@ -56,7 +57,7 @@ function Product() {
         return(
             <>
                 <div className={"col-md-6"}>
-                    <img src={product.image} alt={product.title} height={"400px"} width={"400px"}/>
+                    <img src={`/assets/produits/${product.image}`} alt={product.title} height="400px" width="400px" />
                 </div>
 
                 <div className={"col-md-6"}>

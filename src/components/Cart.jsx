@@ -1,33 +1,77 @@
 import React, {useEffect, useState} from 'react';
 import { clearCart, delItem } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import {useNavigate } from "react-router-dom";
+
+import axios from "axios";
+import {checkIfUserIsAuthenticated, getAuthToken} from "../services/authService";
 
 const Cart = () => {
     const state = useSelector((state) => state.addItem);
     const [total, setTotal] = useState()
     const dispatch = useDispatch();
+    const navigate = useNavigate(); // Declare navigate here
+
 
     const handleClose = (item) => {
         dispatch(delItem(item));
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
+
+        const isUserAuthenticated = checkIfUserIsAuthenticated();
+
+        if (!isUserAuthenticated) {
+            // If the user is not authenticated, navigate to the login page
+            navigate('/login');
+            return;
+        }
         // Simulate the process of creating an order
         const currentDate = new Date();
         const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
 
+        const authToken = getAuthToken();
+
+        // Set the authorization header with the token
+        const config = {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        };
+
         const order = {
             date_commande: formattedDate,
-            prix: state.reduce((total, item) => total + item.price * item.quantity, 0),
+            prix: 0,
             client_id: 1,
             orderStatus_id: 1,
             discount_id: 1,
             produits: state.map((item) => ({
                 produit_id: item.id,
-                quantity: item.quantity,
+                quantity: 1,
                 price: item.price,
             })),
         };
+
+        try {
+            // Send the order data to the API
+            const response = await axios.post('http://127.0.0.1:8000/api/commandes', order, config);
+
+            // Handle the response as needed
+            console.log('Order placed successfully:', response.data);
+
+            // Clear the cart after placing the order
+            dispatch(clearCart());
+            setTotal(0);
+            navigate('/products');
+
+
+            // Redirect to the products page or any other page
+            //navigate('/products');
+        } catch (error) {
+            // Handle errors
+            console.error('Error during checkout:', error);
+            alert('Checkout failed');
+        }
 
         // Log the order or send it to the server
         console.log('Order:', order);
@@ -50,7 +94,7 @@ const Cart = () => {
                     <button onClick={() => handleClose(cartItem)} className="btn-close float-end" aria-label="Close"></button>
                     <div className="row justify-content-center">
                         <div className="col-md-4">
-                            <img src={cartItem.image} alt={cartItem.title} height="200px" width="180px" />
+                            <img src={`/assets/produits/${cartItem.image}`}  alt={cartItem.title} height="200px" width="180px" />
                         </div>
                         <div className="col-md-4">
                             <h3>{cartItem.title}</h3>
@@ -87,7 +131,7 @@ const Cart = () => {
 
     return (
         <div style={{ marginTop: 100 }}>
-            <p className="lead fw-bold d-flex justify-content-center">Total: ${total}</p>
+            <p className="lead fw-bold d-flex justify-content-center">Order Total Price: ${total}</p>
 
             {state.length === 0 && emptyCart()}
             {state.length !== 0 && state.map(cartItems)}

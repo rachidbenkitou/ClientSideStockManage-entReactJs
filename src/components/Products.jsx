@@ -15,10 +15,11 @@ const Products = () =>  {
     }, []);
     const getProducts=async () =>{
         setLoading(true);
-        const  response= await fetch("https://fakestoreapi.com/products");
+        const  response= await fetch("http://127.0.0.1:8000/api/produits");
         if(componentMounted){
-            setData(await response.clone().json());
-            setFilter(await response.json() );
+            const reponseData=await response.clone().json()
+            setData(reponseData.produits.data);
+            setFilter(reponseData.produits.data);
             setLoading(false)
         }
 
@@ -47,7 +48,7 @@ const Products = () =>  {
     }
 
     const filterProdut= (cat)=>{
-        const updatedList= data.filter((x)=> x.category===cat);
+        const updatedList= data.filter((x)=> x.categorie_nom===cat);
         setFilter(updatedList);
     }
     const ShowProducts= ()=>{
@@ -59,6 +60,7 @@ const Products = () =>  {
                     <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("women's clothing")}>Women's Clothing</button>
                     <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("jewelery")}>Jewelery</button>
                     <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("electronics")}>Electronics</button>
+                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("test")}>test</button>
                 </div>
                 {filter.map((product)=>{
                     return (
@@ -66,7 +68,7 @@ const Products = () =>  {
                             <div className={"col-md-3 mb-4"} key={product.id}>
 
                                 <div className="card h-100 text-center p-4"  >
-                                    <img  src={product.image} className="card-img-top"
+                                    <img  src={`assets/produits/${product.image}`} className="card-img-top"
                                           alt={product.title} height="250"/>
                                     <div className="card-body">
                                         <h5 className="card-title mb-0">{product.title.substring(0, 12)}</h5>
