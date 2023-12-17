@@ -6,6 +6,8 @@ function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState(null);
+
 
     async function save(event) {
         event.preventDefault();
@@ -20,25 +22,38 @@ function Login() {
 
             const token  = response.data.token;
 
-            alert(token)
             // Store the token in localStorage
             localStorage.setItem('myapptoken', token);
             navigate('/products')
 
         } catch (err) {
-            alert('User Login failed')
+            // Display error message for 1 second
+            setErrorMessage("Invalid email or password");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 10000);
         }
     }
 
     return (
         <>
+
             {/* Login 1 - Bootstrap Brain Component */}
             <div className="bg-light py-3 py-md-5">
                 <div className="container">
+
                     <div className="row justify-content-md-center">
                         <div className="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6">
                             <div className="bg-white p-4 p-md-5 rounded shadow-sm">
                                 <div className="row">
+                                    {/* Display error message */}
+                                    {errorMessage && (
+
+                                        <div className="alert alert-danger" role="alert">
+                                            {errorMessage}
+                                        </div>
+
+                                    )}
                                     <div className="col-12">
                                         <div className="text-center mb-5">
                                             <NavLink className="navbar-brand fw-bold fs-4" to={'/'}>Please sign in

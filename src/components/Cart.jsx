@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { clearCart, delItem } from '../redux/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import {useNavigate } from "react-router-dom";
+import {clearCart, delItem} from '../redux/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigate} from "react-router-dom";
 
 import axios from "axios";
 import {checkIfUserIsAuthenticated, getAuthToken} from "../services/authService";
@@ -11,6 +11,7 @@ const Cart = () => {
     const [total, setTotal] = useState()
     const dispatch = useDispatch();
     const navigate = useNavigate(); // Declare navigate here
+    const [isOrderSent, setSentOrder] = useState(false)
 
 
     const handleClose = (item) => {
@@ -62,7 +63,8 @@ const Cart = () => {
             // Clear the cart after placing the order
             dispatch(clearCart());
             setTotal(0);
-            navigate('/products');
+            //navigate('/products');
+            setSentOrder(true)
 
 
             // Redirect to the products page or any other page
@@ -82,7 +84,7 @@ const Cart = () => {
     };
 
     useEffect(() => {
-        setTotal(state.reduce((total, item) => total + item.price , 0).toFixed(2))
+        setTotal(state.reduce((total, item) => total + item.price, 0).toFixed(2))
 
     }, []);
     const cartItems = (cartItem) => {
@@ -91,10 +93,12 @@ const Cart = () => {
         return (
             <div className="px-4 my-5 bg-light rounded-3" key={cartItem.id}>
                 <div className="container py-4">
-                    <button onClick={() => handleClose(cartItem)} className="btn-close float-end" aria-label="Close"></button>
+                    <button onClick={() => handleClose(cartItem)} className="btn-close float-end"
+                            aria-label="Close"></button>
                     <div className="row justify-content-center">
                         <div className="col-md-4">
-                            <img src={`/assets/produits/${cartItem.image}`}  alt={cartItem.title} height="200px" width="180px" />
+                            <img src={`/assets/produits/${cartItem.image}`} alt={cartItem.title} height="200px"
+                                 width="180px"/>
                         </div>
                         <div className="col-md-4">
                             <h3>{cartItem.title}</h3>
@@ -118,21 +122,40 @@ const Cart = () => {
         );
     };
 
+    const orderSentSuccessfully = () => {
+        return (
+            <div className="container py-4">
+                <div className="row">
+                    <div className="alert alert-success" role="alert">
+<span style={{fontWeight: 'bold', fontSize: '1.2em', textAlign: 'center', display: 'block', margin: 'auto'}}>
+    Your order has been sent successfully!
+</span>
+
+
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     const button = () => {
 
         return (
             <div className="container">
                 <div className="row">
-                    <button onClick={handleCheckout} className="btn btn-outline-dark mb-3 w-25 mx-auto">Proceed To Checkout</button>
+                    <button onClick={handleCheckout} className="btn btn-outline-dark mb-3 w-25 mx-auto">Proceed To
+                        Checkout
+                    </button>
                 </div>
             </div>
         );
     };
 
     return (
-        <div style={{ marginTop: 100 }}>
+        <div style={{marginTop: 100}}>
             <p className="lead fw-bold d-flex justify-content-center">Order Total Price: ${total}</p>
 
+            {isOrderSent && orderSentSuccessfully()}
             {state.length === 0 && emptyCart()}
             {state.length !== 0 && state.map(cartItems)}
             {state.length !== 0 && button()}

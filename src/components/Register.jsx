@@ -12,6 +12,7 @@ function Register() {
     const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState(null);
 
 
     async function save(event){
@@ -32,7 +33,11 @@ function Register() {
 
             makeAlert()
         } catch (err){
-            alert('User Registration failed')
+            // Display error message for 1 second
+            setErrorMessage("Email already exists");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 10000);
         }
 }
 
@@ -69,8 +74,17 @@ function Register() {
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <div className="card shadow">
+
                             <div className="card-body p-5">
                                 <h2 className="text-center mb-4">Sign Up</h2>
+                                {/* Display error message */}
+                                {errorMessage && (
+
+                                    <div className="alert alert-danger" role="alert">
+                                        {errorMessage}
+                                    </div>
+
+                                )}
                                 <form>
                                     <div className="mb-3">
                                         <label  className="form-label">

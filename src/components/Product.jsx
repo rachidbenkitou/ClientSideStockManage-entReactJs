@@ -3,6 +3,9 @@ import { useDispatch} from "react-redux";
 import {NavLink, useParams} from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import {addItem, delItem} from "../redux/actions";
+import {checkIfUserIsAuthenticated} from "../services/authService";
+import {useNavigate } from "react-router-dom";
+
 
 function Product() {
     const {id} = useParams();
@@ -10,6 +13,8 @@ function Product() {
     const [loading, setLoading] = useState(false);
     const dispatch= useDispatch();
     const [cartBtn, setCartBtn] = useState('Add to Cart');
+    const navigate = useNavigate(); // Declare navigate here
+
 
     const addProduct= (product)=>{
         dispatch(addItem(product));
@@ -27,6 +32,13 @@ function Product() {
     }, []);
 
     const handleCart = (product) => {
+        const isUserAuthenticated = checkIfUserIsAuthenticated();
+
+        if (!isUserAuthenticated) {
+            // If the user is not authenticated, navigate to the login page
+            navigate('/login');
+            return;
+        }
         if (cartBtn === 'Add to Cart') {
             dispatch(addItem(product));
             setCartBtn('Remove from Cart');
