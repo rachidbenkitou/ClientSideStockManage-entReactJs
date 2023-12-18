@@ -7,7 +7,16 @@ function Login() {
     const [password, setPassword] = useState('')
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState(null);
+    const [client, setClient] = useState([])
 
+
+    const  getClient = async (emaill)=>{
+        const response=  await fetch(`http://127.0.0.1:8000/api/clients/email/${emaill}`);
+        const reponseData=await response.clone().json()
+        setClient(reponseData.data.data);
+        localStorage.setItem('ecommerceClientId', reponseData.data.data[0].id);
+
+    }
 
     async function save(event) {
         event.preventDefault();
@@ -24,6 +33,8 @@ function Login() {
 
             // Store the token in localStorage
             localStorage.setItem('myapptoken', token);
+            getClient(email)
+
             navigate('/products')
 
         } catch (err) {

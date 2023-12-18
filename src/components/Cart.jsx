@@ -42,8 +42,8 @@ const Cart = () => {
 
         const order = {
             date_commande: formattedDate,
-            prix: 0,
-            client_id: 1,
+            prix: total,
+            client_id: localStorage.getItem('ecommerceClientId'),
             orderStatus_id: 1,
             discount_id: 1,
             produits: state.map((item) => ({

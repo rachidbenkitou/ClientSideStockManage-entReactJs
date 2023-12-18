@@ -34,7 +34,7 @@ function Register() {
             makeAlert()
         } catch (err){
             // Display error message for 1 second
-            setErrorMessage("Email already exists");
+            setErrorMessage("Email or Phone already exists");
             setTimeout(() => {
                 setErrorMessage(null);
             }, 10000);
@@ -48,7 +48,7 @@ function Register() {
         setTimeout(() => {
             setShowAlert(false);
             navigate('/login')
-        }, 1000);
+        }, 100);
 
     };
     const Alert = () => {

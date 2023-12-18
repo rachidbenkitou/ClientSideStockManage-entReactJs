@@ -1,16 +1,22 @@
 import {NavLink} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+
 import Button from "bootstrap/js/src/button";
+import {clearCart} from "../redux/actions";
 
 const NavBar = () => {
     const  state = useSelector((state)=> state.addItem)
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const handleLogout = () => {
         // Remove the token from localStorage
         localStorage.removeItem('myapptoken');
+        localStorage.removeItem('ecommerceClientId');
+        dispatch(clearCart());
 
         // Redirect to the login page or any other page after logout
         navigate('/login');
