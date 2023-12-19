@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate, useParams} from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
@@ -7,9 +7,12 @@ import {checkIfUserIsAuthenticated, getAuthToken} from "../services/authService"
 import axios from "axios";
 
 
+
 function Pack() {
+
     const {id} = useParams();
     const [product, setProduct] = useState([]);
+    const [isPackCommandSuccess, setIsPackCommandSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch= useDispatch();
     const [cartBtn, setCartBtn] = useState('Buy the pack');
@@ -35,15 +38,16 @@ function Pack() {
         };
 
         const order = {
-            prix: 1,
-            client_id: localStorage.getItem('ecommerceClientId'),
+            client_id:4,
             price: product.prix,
-            pack_id: product.id
+            pack_command_id: product.id
         };
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/packsCommandes', order, config);
+            setIsPackCommandSuccess(true)
         } catch (error) {
             // Handle errors
+            console.log(order)
             console.error('Error during checkout:', error);
             alert('Checkout failed');
         }
@@ -80,9 +84,16 @@ function Pack() {
             </>
         )
     }
+
+
     const  ShowProduct=()=>{
         return(
             <>
+                {isPackCommandSuccess &&
+                    <div className="alert alert-success" role="alert">
+                        You order has been sent successfully!
+                    </div>
+                }
                 <div className={"col-md-6"}>
                     <img src={`/assets/packs/pack.jpg`} alt={product.codePack} height="400px" width="400px" />
                 </div>
@@ -110,7 +121,7 @@ function Pack() {
 
                         Pack is a good quality phone, we have an important stock, if you want to buy send a message in our whatsApp or order here in website, if you want to buy send a message in our whatsApp or order here in website.
                     </p>
-                    <button className={"btn btn-outline-dark px-4 py-2 "} onClick={handleCheckout()}>
+                    <button className={"btn btn-outline-dark px-4 py-2 "} onClick={handleCheckout}>
                         {cartBtn}
                     </button>
                 </div>

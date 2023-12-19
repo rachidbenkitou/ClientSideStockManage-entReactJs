@@ -43,11 +43,8 @@ function Contact() {
             <div className="container">
                 <div className="row justify-content-md-center">
                     <div className="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
-                        <h2 className="mb-4 display-5 text-center">Contact</h2>
-                        <p className="text-secondary mb-5 text-center">Hey, feel free to reach out to our team with any
-                            questions or inquiries. We're here to help! We'll do our best to respond to you soon and
-                            assist you in any way we can.</p>
-                        <hr className="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle"/>
+                        <h2 className="mb-4 display-5 text-center">Contact Us</h2>
+
                     </div>
                 </div>
             </div>
