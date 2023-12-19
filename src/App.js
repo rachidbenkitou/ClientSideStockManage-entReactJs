@@ -9,6 +9,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Package from "./components/Packages";
 import Contact from "./components/Contact";
+import Pack from "./components/Pack";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path={"/login"} element={<Login />} />
                 <Route path={"/register"} element={<Register />} />
                 <Route path={"/packages"} element={<Package />} />
+                <Route path={"/packages/:id"} element={<Pack />} />
                 <Route path={"/contact"} element={<Contact />} />
             </Routes>
         </>

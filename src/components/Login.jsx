@@ -13,8 +13,8 @@ function Login() {
     const  getClient = async (emaill)=>{
         const response=  await fetch(`http://127.0.0.1:8000/api/clients/email/${emaill}`);
         const reponseData=await response.clone().json()
-        setClient(reponseData.data.data);
-        localStorage.setItem('ecommerceClientId', reponseData.data.data[0].id);
+        setClient(reponseData.client.data);
+        localStorage.setItem('ecommerceClientId', reponseData.client.data[0].id);
 
     }
 

@@ -4,21 +4,22 @@ import Skeleton from "react-loading-skeleton";
 import {NavLink} from "react-router-dom";
 
 
-const Package = () =>  {
+const Products = () =>  {
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState(data);
     const [loading, setLoading] =useState(false);
     let componentMounted= true;
     useEffect(()=>{
-        getProducts();
+        getPacks();
 
     }, []);
-    const getProducts=async () =>{
+    const getPacks=async () =>{
         setLoading(true);
-        const  response= await fetch("https://fakestoreapi.com/products");
+        const  response= await fetch("http://127.0.0.1:8000/api/packs");
         if(componentMounted){
-            setData(await response.clone().json());
-            setFilter(await response.json() );
+            const reponseData=await response.clone().json()
+            setData(reponseData.packs.data);
+            setFilter(reponseData.packs.data);
             setLoading(false)
         }
 
@@ -46,32 +47,21 @@ const Package = () =>  {
         )
     }
 
-    const filterProdut= (cat)=>{
-        const updatedList= data.filter((x)=> x.category===cat);
-        setFilter(updatedList);
-    }
     const ShowProducts= ()=>{
         return (
             <>
-                <div className={"buttons d-flex justify-content-center mb-5 pb-5"}>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>setFilter(data)}>All</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("men's clothing")}>Men's Clothing</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("women's clothing")}>Women's Clothing</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("jewelery")}>Jewelery</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("electronics")}>Electronics</button>
-                </div>
-                {filter.map((product)=>{
+                {filter.map((pack)=>{
                     return (
 
-                        <div className={"col-md-3 mb-4"} key={product.id}>
+                        <div className={"col-md-3 mb-4"} key={pack.id}>
 
                             <div className="card h-100 text-center p-4"  >
-                                <img  src={product.image} className="card-img-top"
-                                      alt={product.title} height="250"/>
+                                <img  src={`assets/packs/pack.jpg`} className="card-img-top"
+                                      alt={pack.codePack} height="250"/>
                                 <div className="card-body">
-                                    <h5 className="card-title mb-0">{product.title.substring(0, 12)}</h5>
-                                    <p className="card-text lead fw-bold ">${product.price}</p>
-                                    <NavLink to={`/products/${product.id}`} className={"btn btn-outline-dark"}>Product Details</NavLink>
+                                    <h5 className="card-title mb-0">{pack.codePack.substring(0, 12)}</h5>
+                                    <p className="card-text lead fw-bold ">${pack.prix}</p>
+                                    <NavLink to={`/packages/${pack.id}`} className={"btn btn-outline-dark"}>Pack Details</NavLink>
                                 </div>
                             </div>
 
@@ -90,7 +80,7 @@ const Package = () =>  {
                 <div className={"container my-5 py-5"}>
                     <div className={"row"}>
                         <div className={"col-12"}>
-                            <h1 className={"display-6 fw-bolder text-center"}>Latest Products</h1>
+                            <h1 className={"display-6 fw-bolder text-center"}>Latest Packs</h1>
                             <hr/>
                         </div>
 
@@ -108,4 +98,4 @@ const Package = () =>  {
     );
 }
 
-export default Package;
+export default Products;

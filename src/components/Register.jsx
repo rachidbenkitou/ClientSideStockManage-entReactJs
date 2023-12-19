@@ -21,11 +21,10 @@ function Register() {
             await axios.post("http://127.0.0.1:8000/api/registerClient",{
                 firstName: firstName,
                 lastName: lastName,
-                address: address,
+                adresse: address,
                 phone: phone,
                 email: email,
                 password: password
-
             },
                 {
                     withCredentials: false

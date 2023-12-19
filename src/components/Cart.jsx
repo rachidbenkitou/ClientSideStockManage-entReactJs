@@ -49,7 +49,7 @@ const Cart = () => {
             produits: state.map((item) => ({
                 produit_id: item.id,
                 quantity: 1,
-                price: item.price,
+                price: item.prix_unitaire,
             })),
         };
 
@@ -58,7 +58,7 @@ const Cart = () => {
             const response = await axios.post('http://127.0.0.1:8000/api/commandes', order, config);
 
             // Handle the response as needed
-            console.log('Order placed successfully:', response.data);
+            //console.log('Order placed successfully: Rachid', response.commandes);
 
             // Clear the cart after placing the order
             dispatch(clearCart());
@@ -84,25 +84,25 @@ const Cart = () => {
     };
 
     useEffect(() => {
-        setTotal(state.reduce((total, item) => total + item.price, 0).toFixed(2))
+        setTotal(state.reduce((total, item) => total + item.prix_unitaire, 0).toFixed(2))
 
     }, []);
     const cartItems = (cartItem) => {
         console.log('Product in Cart:', cartItem);
 
         return (
-            <div className="px-4 my-5 bg-light rounded-3" key={cartItem.id}>
+            <div className="px-4 my-5 bg-light rounded-3"  key={cartItem.id}>
                 <div className="container py-4">
                     <button onClick={() => handleClose(cartItem)} className="btn-close float-end"
                             aria-label="Close"></button>
                     <div className="row justify-content-center">
                         <div className="col-md-4">
-                            <img src={`/assets/produits/${cartItem.image}`} alt={cartItem.title} height="200px"
-                                 width="180px"/>
+                            <img src={`/assets/produits/${cartItem.image}`} alt={cartItem.nom} height="100px"
+                                 width="80px"/>
                         </div>
                         <div className="col-md-4">
-                            <h3>{cartItem.title}</h3>
-                            <p className="lead fw-bold">${cartItem.price}</p>
+                            <h3>{cartItem.nom}</h3>
+                            <p className="lead fw-bold">${cartItem.prix_unitaire}</p>
                         </div>
                     </div>
                 </div>

@@ -1,37 +1,22 @@
 import {useEffect, useState} from "react";
-import { useDispatch} from "react-redux";
-import {NavLink, useParams} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {useNavigate, useParams} from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import {addItem, delItem} from "../redux/actions";
-import {checkIfUserIsAuthenticated} from "../services/authService";
-import {useNavigate } from "react-router-dom";
+import {addItem} from "../redux/actions";
+import {checkIfUserIsAuthenticated, getAuthToken} from "../services/authService";
+import axios from "axios";
 
 
-function Product() {
+function Pack() {
     const {id} = useParams();
     const [product, setProduct] = useState([]);
     const [loading, setLoading] = useState(false);
     const dispatch= useDispatch();
-    const [cartBtn, setCartBtn] = useState('Add to Cart');
+    const [cartBtn, setCartBtn] = useState('Buy the pack');
     const navigate = useNavigate(); // Declare navigate here
 
+    const handleCheckout = async () => {
 
-    const addProduct= (product)=>{
-        dispatch(addItem(product));
-    }
-    useEffect(()=>{
-        const  getProduct = async ()=>{
-            setLoading(true);
-            const response=  await fetch(`http://127.0.0.1:8000/api/produits/id/${id}`);
-            const reponseData=await response.clone().json()
-            setProduct(reponseData.produits.data[0]);
-            setLoading(false);
-        }
-        getProduct();
-
-    }, []);
-
-    const handleCart = (product) => {
         const isUserAuthenticated = checkIfUserIsAuthenticated();
 
         if (!isUserAuthenticated) {
@@ -39,14 +24,44 @@ function Product() {
             navigate('/login');
             return;
         }
-        if (cartBtn === 'Add to Cart') {
-            dispatch(addItem(product));
-            setCartBtn('Remove from Cart');
-        } else {
-            dispatch(delItem(product));
-            setCartBtn('Add to Cart');
+
+        const authToken = getAuthToken();
+
+        // Set the authorization header with the token
+        const config = {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        };
+
+        const order = {
+            prix: 1,
+            client_id: localStorage.getItem('ecommerceClientId'),
+            price: product.prix,
+            pack_id: product.id
+        };
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/packsCommandes', order, config);
+        } catch (error) {
+            // Handle errors
+            console.error('Error during checkout:', error);
+            alert('Checkout failed');
         }
     };
+    useEffect(()=>{
+        const  getPack = async ()=>{
+            setLoading(true);
+            const response=  await fetch(`http://127.0.0.1:8000/api/packs/id/${id}`);
+            const reponseData=await response.clone().json()
+            setProduct(reponseData.pack.data[0]);
+            console.log(product)
+            setLoading(false);
+        }
+        getPack();
+
+    }, []);
+
+
     const  Loading=()=>{
         return(
             <>
@@ -69,14 +84,14 @@ function Product() {
         return(
             <>
                 <div className={"col-md-6"}>
-                    <img src={`/assets/produits/${product.image}`} alt={product.title} height="400px" width="400px" />
+                    <img src={`/assets/packs/pack.jpg`} alt={product.codePack} height="400px" width="400px" />
                 </div>
 
                 <div className={"col-md-6"}>
                     <h4 className={"test-uppercase text-black-50"}>
-                        {product.category}
+                        {product.codePack}
                     </h4>
-                    <h1 className={"display-5"}>{product.prix_unitaire}</h1>
+                    <h1 className={"display-5"}>{product.prix}</h1>
                     <p className={"lead fw-bolder"}>
                         {/*Rating {product.rating && product.rating.rate}*/}
                         5/5 Good Quality   <i className={"fa fa-star"}></i>
@@ -88,16 +103,16 @@ function Product() {
                     </p>
 
                     <h3 className={"display-6 fw-bold my-4"}>
-                        $ {product.prix_unitaire}
+                        $ {product.prix}
                     </h3>
 
-                    <p className={"lead"}>{product.description}</p>
-                    <button className={"btn btn-outline-dark px-4 py-2 "} onClick={()=>handleCart(product)}>
+                    <p className={"lead"}>
+
+                        Pack is a good quality phone, we have an important stock, if you want to buy send a message in our whatsApp or order here in website, if you want to buy send a message in our whatsApp or order here in website.
+                    </p>
+                    <button className={"btn btn-outline-dark px-4 py-2 "} onClick={handleCheckout()}>
                         {cartBtn}
                     </button>
-                    <NavLink className={"btn btn-dark ms-2 px-3 py-2"} to={'/cart'}>
-                        Go to Cart
-                    </NavLink>
                 </div>
             </>
         )
@@ -115,4 +130,4 @@ function Product() {
         </>
     );
 }
-export default Product;
+export default Pack;
