@@ -19,7 +19,7 @@ const Products = () =>  {
     }, []);
     const getPacks=async () =>{
         setLoading(true);
-        const  response= await fetch("http://127.0.0.1:8000/api/packs");
+        const  response= await fetch("http://127.0.0.1:8000/api/packProduits");
         if(componentMounted){
             const reponseData=await response.clone().json()
 

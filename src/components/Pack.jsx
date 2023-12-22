@@ -38,7 +38,7 @@ function Pack() {
         };
 
         const order = {
-            client_id:4,
+            client_id:localStorage.getItem("ecommerceClientId"),
             price: product.prix,
             pack_command_id: product.id
         };

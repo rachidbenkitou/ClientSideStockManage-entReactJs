@@ -69,7 +69,7 @@ function Product() {
         return(
             <>
                 <div className={"col-md-6"}>
-                    <img src={`/assets/produits/${product.image}`} alt={product.title} height="400px" width="400px" />
+                    <img src={`/assets/produits/samsung.jpg`} alt={product.title} height="400px" width="400px" />
                 </div>
 
                 <div className={"col-md-6"}>
