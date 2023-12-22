@@ -2,12 +2,14 @@ import '../App.css';
 import {useEffect, useState} from "react";
 import Skeleton from "react-loading-skeleton";
 import {NavLink} from "react-router-dom";
+import Button from "bootstrap/js/src/button";
 
 
 const Products = () =>  {
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState(data);
     const [loading, setLoading] =useState(false);
+    const [isListEmpty, setIsListEmpty] = useState(true)
     let componentMounted= true;
     useEffect(()=>{
         getProducts();
@@ -18,14 +20,34 @@ const Products = () =>  {
         const  response= await fetch("http://127.0.0.1:8000/api/produits");
         if(componentMounted){
             const reponseData=await response.clone().json()
-            setData(reponseData.produits.data);
-            setFilter(reponseData.produits.data);
-            setLoading(false)
+            if(reponseData.status===200){
+                setIsListEmpty(false)
+                setData(reponseData.produits.data);
+                setFilter(reponseData.produits.data);
+                setLoading(false)
+            }
         }
 
         return ()=>{
             componentMounted= false;
         }
+    }
+
+    const NotproductFound= ()=>{
+        return (
+            <div className="d-flex align-items-center justify-content-center">
+                <div className="text-center">
+                    <h1 className="display-1 fw-bold">404</h1>
+                    <p className="fs-3">
+                        <span className="text-danger">Oops!</span> No product found.
+                    </p>
+                    <p className="lead">No product found this time! Go to home</p>
+                    <NavLink to={'/home'} className="btn btn-primary">
+                        Go Home
+                    </NavLink>
+                </div>
+            </div>
+        );
     }
     const Loading= ()=>{
         return (
@@ -54,6 +76,7 @@ const Products = () =>  {
     const ShowProducts= ()=>{
         return (
             <>
+
                 <div className={"buttons d-flex justify-content-center mb-0 pb-3"}>
                     <button className={"btn btn-outline-dark me-2"} onClick={()=>setFilter(data)}>All</button>
                     <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("men's clothing")}>Men's Clothing</button>
@@ -93,6 +116,9 @@ const Products = () =>  {
                         <div className={"col-12"}>
                             <h1 className={"display-6 fw-bolder text-center"}>Latest Products</h1>
                             <hr/>
+                            {isListEmpty && (
+                                <NotproductFound/>
+                            )}
                         </div>
 
                     </div>

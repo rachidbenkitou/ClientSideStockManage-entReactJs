@@ -8,6 +8,8 @@ const Products = () =>  {
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState(data);
     const [loading, setLoading] =useState(false);
+    const [isListEmpty, setIsListEmpty] = useState(true)
+
     let componentMounted= true;
     useEffect(()=>{
         getPacks();
@@ -18,9 +20,13 @@ const Products = () =>  {
         const  response= await fetch("http://127.0.0.1:8000/api/packs");
         if(componentMounted){
             const reponseData=await response.clone().json()
-            setData(reponseData.packs.data);
-            setFilter(reponseData.packs.data);
-            setLoading(false)
+
+            if(reponseData.status===200){
+                setIsListEmpty(false)
+                setData(reponseData.packs.data);
+                setFilter(reponseData.packs.data);
+                setLoading(false)
+            }
         }
 
         return ()=>{
@@ -46,10 +52,27 @@ const Products = () =>  {
             </>
         )
     }
-
+    const NoPackageFound= ()=>{
+        return (
+            <div className="d-flex align-items-center justify-content-center ">
+                <div className="text-center">
+                    <h1 className="display-1 fw-bold">404</h1>
+                    <p className="fs-3">
+                        <span className="text-danger">Oops!</span> No package found.
+                    </p>
+                    <p className="lead">No package found this time! Go to home</p>
+                    <NavLink to={'/home'}  className="btn btn-primary">
+                        Go Home
+                    </NavLink>
+                </div>
+            </div>
+        );
+    }
     const ShowProducts= ()=>{
         return (
+
             <>
+
                 {filter.map((pack)=>{
                     return (
 
@@ -82,9 +105,16 @@ const Products = () =>  {
                         <div className={"col-12"}>
                             <h1 className={"display-6 fw-bolder text-center"}>Latest Packs</h1>
                             <hr/>
+                            {isListEmpty && (
+
+                                <NoPackageFound/>
+
+                            )}
                         </div>
 
                     </div>
+
+
 
                     <div className={"row justify-content-center"}>
                         {loading ? <Loading/> : <ShowProducts/>}
