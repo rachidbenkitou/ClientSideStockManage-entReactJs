@@ -1,15 +1,17 @@
 import '../App.css';
 import {useEffect, useState} from "react";
-import Skeleton from "react-loading-skeleton";
+import Skeleton from 'react-loading-skeleton';
 import {NavLink} from "react-router-dom";
 import Button from "bootstrap/js/src/button";
+import {css} from "@emotion/react";
+import {ClipLoader} from "react-spinners";
 
 
 const Products = () =>  {
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState(data);
     const [loading, setLoading] =useState(false);
-    const [isListEmpty, setIsListEmpty] = useState(true)
+    const [isListEmpty, setIsListEmpty] = useState(false)
     let componentMounted= true;
     useEffect(()=>{
         getProducts();
@@ -25,6 +27,9 @@ const Products = () =>  {
                 setData(reponseData.produits.data);
                 setFilter(reponseData.produits.data);
                 setLoading(false)
+            }else {
+                setIsListEmpty(true)
+
             }
         }
 
@@ -36,6 +41,7 @@ const Products = () =>  {
     const NotproductFound= ()=>{
         return (
             <div className="d-flex align-items-center justify-content-center">
+                {setLoading(false)}
                 <div className="text-center">
                     <h1 className="display-1 fw-bold">404</h1>
                     <p className="fs-3">
@@ -49,25 +55,32 @@ const Products = () =>  {
             </div>
         );
     }
-    const Loading= ()=>{
+
+
+    const Loading = () => {
+        const override = css`
+    display: block;
+    margin: 0 auto;
+  `;
+
         return (
             <>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
-
             </>
-        )
-    }
+        );
+    };
+
 
     const filterProdut= (cat)=>{
         const updatedList= data.filter((x)=> x.categorie_nom===cat);

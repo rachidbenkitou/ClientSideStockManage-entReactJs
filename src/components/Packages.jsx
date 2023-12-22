@@ -2,13 +2,15 @@ import '../App.css';
 import {useEffect, useState} from "react";
 import Skeleton from "react-loading-skeleton";
 import {NavLink} from "react-router-dom";
+import {css} from "@emotion/react";
+import {ClipLoader} from "react-spinners";
 
 
 const Products = () =>  {
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState(data);
     const [loading, setLoading] =useState(false);
-    const [isListEmpty, setIsListEmpty] = useState(true)
+    const [isListEmpty, setIsListEmpty] = useState(false)
 
     let componentMounted= true;
     useEffect(()=>{
@@ -22,10 +24,11 @@ const Products = () =>  {
             const reponseData=await response.clone().json()
 
             if(reponseData.status===200){
-                setIsListEmpty(false)
                 setData(reponseData.packs.data);
                 setFilter(reponseData.packs.data);
                 setLoading(false)
+            } else {
+                setIsListEmpty(true)
             }
         }
 
@@ -33,28 +36,35 @@ const Products = () =>  {
             componentMounted= false;
         }
     }
-    const Loading= ()=>{
+    const Loading = () => {
+        const override = css`
+    display: block;
+    margin: 0 auto;
+  `;
+
         return (
             <>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
                 <div className={"col-md-3"}>
-                    <Skeleton height={350}/>
+                    <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
                 </div>
-
             </>
-        )
-    }
+        );
+    };
+
     const NoPackageFound= ()=>{
         return (
+
             <div className="d-flex align-items-center justify-content-center ">
+                {setLoading(false)}
                 <div className="text-center">
                     <h1 className="display-1 fw-bold">404</h1>
                     <p className="fs-3">
@@ -106,15 +116,11 @@ const Products = () =>  {
                             <h1 className={"display-6 fw-bolder text-center"}>Latest Packs</h1>
                             <hr/>
                             {isListEmpty && (
-
                                 <NoPackageFound/>
-
                             )}
                         </div>
 
                     </div>
-
-
 
                     <div className={"row justify-content-center"}>
                         {loading ? <Loading/> : <ShowProducts/>}

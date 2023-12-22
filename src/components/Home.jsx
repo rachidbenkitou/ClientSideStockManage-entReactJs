@@ -1,4 +1,5 @@
 import Products from "./Products";
+import React from "react";
 
 function Home() {
     return (
@@ -14,6 +15,11 @@ function Home() {
                 </div>
             </div>
             <Products/>
+
+            {/* Footer */}
+            <footer className="bg-dark text-white text-center py-3">
+                <p>&copy; 2023 Your E-Commerce Store. All rights reserved.</p>
+            </footer>
 
         </div>
     );
