@@ -90,13 +90,15 @@ const Products = () =>  {
         return (
             <>
 
-                <div className={"buttons d-flex justify-content-center mb-0 pb-3"}>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>setFilter(data)}>All</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("men's clothing")}>Men's Clothing</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("women's clothing")}>Women's Clothing</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("jewelery")}>Jewelery</button>
-                    <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("electronics")}>Electronics</button>
-                </div>
+                {!isListEmpty &&
+                    <div className={"buttons d-flex justify-content-center mb-0 pb-3"}>
+                        <button className={"btn btn-outline-dark me-2"} onClick={()=>setFilter(data)}>All</button>
+                        <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("men's clothing")}>Men's Clothing</button>
+                        <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("women's clothing")}>Women's Clothing</button>
+                        <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("jewelery")}>Jewelery</button>
+                        <button className={"btn btn-outline-dark me-2"} onClick={()=>filterProdut("electronics")}>Electronics</button>
+                    </div>
+                }
                 {filter.map((product)=>{
                     return (
 
