@@ -1,10 +1,12 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useDispatch} from "react-redux";
 import {NavLink, useParams} from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import {addItem, delItem} from "../redux/actions";
 import {checkIfUserIsAuthenticated} from "../services/authService";
 import {useNavigate } from "react-router-dom";
+import {css} from "@emotion/react";
+import {ClipLoader} from "react-spinners";
 
 
 function Product() {
@@ -47,24 +49,22 @@ function Product() {
             setCartBtn('Add to Cart');
         }
     };
-    const  Loading=()=>{
-        return(
+    const Loading = () => {
+        const override = css`
+      display: block;
+      margin: 0 auto;
+    `;
+
+        return (
             <>
-                <div className={"col-md-6"}>
-                    <Skeleton height={400}/>
-                </div>
-                <div className={"col-md-6"} style={{lineHeight:2}}>
-                    <Skeleton height={50} width={300}/>
-                    <Skeleton height={75}/>
-                    <Skeleton height={25} width={150}/>
-                    <Skeleton height={50}/>
-                    <Skeleton height={150}/>
-                    <Skeleton height={50} width={100}/>
-                    <Skeleton height={50} width={100} style={{marginLeft:6}}/>
-                </div>
+                {[1, 2, 3, 4].map((index) => (
+                    <div key={index} className="col-md-3">
+                        <ClipLoader color={"#123abc"} loading={true} css={override} size={50} />
+                    </div>
+                ))}
             </>
-        )
-    }
+        );
+    };
     const  ShowProduct=()=>{
         return(
             <>
