@@ -26,14 +26,16 @@ const Products = () => {
             const response = await fetch("http://127.0.0.1:8000/api/packs");
             const reponseData = await response.json();
 
-            if (componentMounted && response.ok) {
+            if (componentMounted &&  reponseData.status==='200'){
                 setData(reponseData.packs.data);
                 setFilter(reponseData.packs.data);
                 setLoading(false);
-            } else {
+            }
+            if (reponseData.status==='404'){
                 setIsListEmpty(true);
                 setLoading(false);
             }
+
         } catch (error) {
             console.error("Error fetching data:", error);
             setIsListEmpty(true);
@@ -78,7 +80,9 @@ const Products = () => {
     const ShowProducts = () => {
         return (
             <>
-                {filter.map((pack) => (
+                {filter
+                    .filter((pack) => pack.disponible === 1)
+                    .map((pack) => (
                     <div key={pack.id} className="col-md-3 mb-4">
                         <div className="card h-100 text-center p-4">
                             <img src={`assets/packs/pack.jpg`} className="card-img-top" alt={pack.codePack} height="250" />
