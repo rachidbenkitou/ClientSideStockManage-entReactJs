@@ -16,6 +16,7 @@ const Cart = () => {
 
     const handleClose = (item) => {
         dispatch(delItem(item));
+        setTotal(total-item.prix_unitaire)
     };
 
     const handleCheckout = async () => {
