@@ -98,7 +98,7 @@ const Cart = () => {
                             aria-label="Close"></button>
                     <div className="row justify-content-center">
                         <div className="col-md-4">
-                            <img src={`/assets/produits/samsung.jpg`} alt={cartItem.nom} height="100px"
+                            <img src={`/assets/produits/${cartItem.image}`} alt={cartItem.nom} height="100px"
                                  width="80px"/>
                         </div>
                         <div className="col-md-4">

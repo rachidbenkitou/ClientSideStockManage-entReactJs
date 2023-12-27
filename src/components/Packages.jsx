@@ -85,7 +85,7 @@ const Products = () => {
                     .map((pack) => (
                     <div key={pack.id} className="col-md-3 mb-4">
                         <div className="card h-100 text-center p-4">
-                            <img src={`assets/packs/pack.jpg`} className="card-img-top" alt={pack.codePack} height="250" />
+                            <img src={`assets/packs/${pack.image}`} className="card-img-top" alt={pack.codePack} height="250" />
                             <div className="card-body">
                                 <h5 className="card-title mb-0">{pack.codePack.substring(0, 12)}</h5>
                                 <p className="card-text lead fw-bold ">${pack.prix}</p>

@@ -105,7 +105,7 @@ const Products = () =>  {
                             <div className={"col-md-3 mb-4"} key={product.id}>
 
                                 <div className="card h-100 text-center p-4"  >
-                                    <img  src={`assets/produits/samsung.jpg`} className="card-img-top"
+                                    <img  src={`assets/produits/${product.image}`} className="card-img-top"
                                           alt={product.nom} height="250"/>
                                     <div className="card-body">
                                         <h5 className="card-title mb-0">{product.nom.substring(0, 12)}</h5>

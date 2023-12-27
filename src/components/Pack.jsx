@@ -132,7 +132,7 @@ function Pack() {
                     </div>
                 }
                 <div className={"col-md-6"}>
-                    <img src={`/assets/packs/pack.jpg`} alt={product.codePack} height="400px" width="400px" />
+                    <img src={`/assets/packs/${product.image}`} alt={product.codePack} height="400px" width="400px" />
                 </div>
 
                 <div className={"col-md-6"}>
@@ -182,7 +182,7 @@ function Pack() {
                                                 <div className="card mb-3">
                                                     <img
                                                         className="card-img-top"
-                                                        src={`/assets/produits/samsung.jpg`}
+                                                        src={`/assets/produits/${product.image}`}
                                                         alt={product.nom}
                                                         style={{ height: '100px', width: '100px', objectFit: 'cover' }}
                                                     />

@@ -69,14 +69,14 @@ function Product() {
         return(
             <>
                 <div className={"col-md-6"}>
-                    <img src={`/assets/produits/samsung.jpg`} alt={product.title} height="400px" width="400px" />
+                    <img src={`/assets/produits/${product.image}`} alt={product.title} height="400px" width="400px" />
                 </div>
 
                 <div className={"col-md-6"}>
                     <h4 className={"test-uppercase text-black-50"}>
                         {product.category}
                     </h4>
-                    <h1 className={"display-5"}>{product.prix_unitaire}</h1>
+                    <h1 className={"display-5"}>{product.nom}</h1>
                     <p className={"lead fw-bolder"}>
                         {/*Rating {product.rating && product.rating.rate}*/}
                         5/5 Good Quality   <i className={"fa fa-star"}></i>
